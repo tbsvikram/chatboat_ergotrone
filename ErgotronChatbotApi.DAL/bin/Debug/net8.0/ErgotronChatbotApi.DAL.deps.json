@@ -1,0 +1,56 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "ErgotronChatbotApi.DAL/1.0.0": {
+        "dependencies": {
+          "ErgotronChatbotApi.Common": "1.0.0",
+          "ErgotronChatbotApi.Model": "1.0.0"
+        },
+        "runtime": {
+          "ErgotronChatbotApi.DAL.dll": {}
+        }
+      },
+      "ErgotronChatbotApi.Common/1.0.0": {
+        "runtime": {
+          "ErgotronChatbotApi.Common.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ErgotronChatbotApi.Model/1.0.0": {
+        "dependencies": {
+          "ErgotronChatbotApi.Common": "1.0.0"
+        },
+        "runtime": {
+          "ErgotronChatbotApi.Model.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ErgotronChatbotApi.DAL/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ErgotronChatbotApi.Common/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ErgotronChatbotApi.Model/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

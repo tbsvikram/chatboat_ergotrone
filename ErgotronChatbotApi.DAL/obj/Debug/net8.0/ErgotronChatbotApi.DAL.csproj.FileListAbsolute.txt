@@ -1,0 +1,17 @@
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\bin\Debug\net8.0\ErgotronChatbotApi.DAL.deps.json
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\bin\Debug\net8.0\ErgotronChatbotApi.DAL.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\bin\Debug\net8.0\ErgotronChatbotApi.DAL.pdb
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\bin\Debug\net8.0\ErgotronChatbotApi.Common.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\bin\Debug\net8.0\ErgotronChatbotApi.Model.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\bin\Debug\net8.0\ErgotronChatbotApi.Common.pdb
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\bin\Debug\net8.0\ErgotronChatbotApi.Model.pdb
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\obj\Debug\net8.0\ErgotronChatbotApi.DAL.csproj.AssemblyReference.cache
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\obj\Debug\net8.0\ErgotronChatbotApi.DAL.GeneratedMSBuildEditorConfig.editorconfig
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\obj\Debug\net8.0\ErgotronChatbotApi.DAL.AssemblyInfoInputs.cache
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\obj\Debug\net8.0\ErgotronChatbotApi.DAL.AssemblyInfo.cs
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\obj\Debug\net8.0\ErgotronChatbotApi.DAL.csproj.CoreCompileInputs.cache
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\obj\Debug\net8.0\Ergotron.E47005F8.Up2Date
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\obj\Debug\net8.0\ErgotronChatbotApi.DAL.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\obj\Debug\net8.0\refint\ErgotronChatbotApi.DAL.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\obj\Debug\net8.0\ErgotronChatbotApi.DAL.pdb
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.DAL\obj\Debug\net8.0\ref\ErgotronChatbotApi.DAL.dll

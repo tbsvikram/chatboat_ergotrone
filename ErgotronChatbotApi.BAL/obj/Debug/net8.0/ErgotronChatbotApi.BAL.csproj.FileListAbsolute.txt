@@ -1,0 +1,17 @@
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\bin\Debug\net8.0\ErgotronChatbotApi.BAL.deps.json
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\bin\Debug\net8.0\ErgotronChatbotApi.BAL.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\bin\Debug\net8.0\ErgotronChatbotApi.BAL.pdb
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\bin\Debug\net8.0\ErgotronChatbotApi.Common.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\bin\Debug\net8.0\ErgotronChatbotApi.Common.pdb
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\obj\Debug\net8.0\ErgotronChatbotApi.BAL.csproj.AssemblyReference.cache
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\obj\Debug\net8.0\ErgotronChatbotApi.BAL.GeneratedMSBuildEditorConfig.editorconfig
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\obj\Debug\net8.0\ErgotronChatbotApi.BAL.AssemblyInfoInputs.cache
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\obj\Debug\net8.0\ErgotronChatbotApi.BAL.AssemblyInfo.cs
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\obj\Debug\net8.0\ErgotronChatbotApi.BAL.csproj.CoreCompileInputs.cache
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\obj\Debug\net8.0\Ergotron.683E05F8.Up2Date
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\obj\Debug\net8.0\ErgotronChatbotApi.BAL.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\obj\Debug\net8.0\refint\ErgotronChatbotApi.BAL.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\obj\Debug\net8.0\ErgotronChatbotApi.BAL.pdb
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\obj\Debug\net8.0\ref\ErgotronChatbotApi.BAL.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\bin\Debug\net8.0\ErgotronChatbotApi.Model.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.BAL\bin\Debug\net8.0\ErgotronChatbotApi.Model.pdb

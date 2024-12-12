@@ -1,0 +1,15 @@
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\bin\Debug\net8.0\ErgotronChatbotApi.Model.deps.json
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\bin\Debug\net8.0\ErgotronChatbotApi.Model.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\bin\Debug\net8.0\ErgotronChatbotApi.Model.pdb
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\bin\Debug\net8.0\ErgotronChatbotApi.Common.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\bin\Debug\net8.0\ErgotronChatbotApi.Common.pdb
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\obj\Debug\net8.0\ErgotronChatbotApi.Model.csproj.AssemblyReference.cache
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\obj\Debug\net8.0\ErgotronChatbotApi.Model.GeneratedMSBuildEditorConfig.editorconfig
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\obj\Debug\net8.0\ErgotronChatbotApi.Model.AssemblyInfoInputs.cache
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\obj\Debug\net8.0\ErgotronChatbotApi.Model.AssemblyInfo.cs
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\obj\Debug\net8.0\ErgotronChatbotApi.Model.csproj.CoreCompileInputs.cache
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\obj\Debug\net8.0\Ergotron.3549E030.Up2Date
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\obj\Debug\net8.0\ErgotronChatbotApi.Model.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\obj\Debug\net8.0\refint\ErgotronChatbotApi.Model.dll
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\obj\Debug\net8.0\ErgotronChatbotApi.Model.pdb
+F:\Projects_Letest\chatbot\ErgotronChatbotApi\ErgotronChatbotApi.Model\obj\Debug\net8.0\ref\ErgotronChatbotApi.Model.dll
