@@ -1,6 +1,0 @@
-@ErgotronChatbotApi_HostAddress = http://localhost:5294
-
-GET {{ErgotronChatbotApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
