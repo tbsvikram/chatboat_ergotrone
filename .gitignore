@@ -1,0 +1,72 @@
+# Build Folders (can be generated)
+bin/
+obj/
+Debug/
+Release/
+
+# User-specific files
+*.user
+*.vs/
+.vscode/
+.idea/
+
+# Logs
+*.log
+*.tlog
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Rider & JetBrains IDEs
+*.suo
+*.ntvs*
+*.njsproj
+*.pssproj
+*.pdb
+*.opendb
+
+# ASP.NET Core
+wwwroot/
+node_modules/
+dist/
+
+# Configuration
+appsettings.*.json
+
+# Package Folders (can be restored)
+packages/
+*.nupkg
+*.snupkg
+
+# Resharper
+_ReSharper*
+*.DotSettings.user
+
+# Coverage reports
+coverage/
+*.coverage
+*.coveragexml
+
+# Backup files
+*.bak
+*.swp
+
+# Temp files
+~$*
+*.tmp
+*.temp
+
+# Entity Framework Migrations
+**/Migrations/
+
+# Publish output
+publish/
+
+# Visual Studio Code
+.history/
+.vscode/*
+
+# Tooling-related
+*.lock.json
+global.json

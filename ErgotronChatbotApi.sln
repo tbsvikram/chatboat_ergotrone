@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35208.52
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErgotronChatbotApi", "ErgotronChatbotApi\ErgotronChatbotApi.csproj", "{47E9025E-3D62-42E2-92CA-87F8FE0FC90C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErgotronChatbotApi.BAL", "ErgotronChatbotApi.BAL\ErgotronChatbotApi.BAL.csproj", "{D2A93CB3-4D78-45E9-BF08-1DB1E2928744}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErgotronChatbotApi.Common", "ErgotronChatbotApi.Common\ErgotronChatbotApi.Common.csproj", "{42DF8EFE-9991-4DE4-BEE6-1A29797D7B2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErgotronChatbotApi.DAL", "ErgotronChatbotApi.DAL\ErgotronChatbotApi.DAL.csproj", "{17259548-1ABC-4837-B073-3857A406939E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErgotronChatbotApi.Model", "ErgotronChatbotApi.Model\ErgotronChatbotApi.Model.csproj", "{C4099C9E-68EF-4889-ADCE-31E7EE884BB6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47E9025E-3D62-42E2-92CA-87F8FE0FC90C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47E9025E-3D62-42E2-92CA-87F8FE0FC90C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47E9025E-3D62-42E2-92CA-87F8FE0FC90C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47E9025E-3D62-42E2-92CA-87F8FE0FC90C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2A93CB3-4D78-45E9-BF08-1DB1E2928744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2A93CB3-4D78-45E9-BF08-1DB1E2928744}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2A93CB3-4D78-45E9-BF08-1DB1E2928744}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2A93CB3-4D78-45E9-BF08-1DB1E2928744}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42DF8EFE-9991-4DE4-BEE6-1A29797D7B2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42DF8EFE-9991-4DE4-BEE6-1A29797D7B2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42DF8EFE-9991-4DE4-BEE6-1A29797D7B2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42DF8EFE-9991-4DE4-BEE6-1A29797D7B2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17259548-1ABC-4837-B073-3857A406939E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17259548-1ABC-4837-B073-3857A406939E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17259548-1ABC-4837-B073-3857A406939E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17259548-1ABC-4837-B073-3857A406939E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4099C9E-68EF-4889-ADCE-31E7EE884BB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4099C9E-68EF-4889-ADCE-31E7EE884BB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4099C9E-68EF-4889-ADCE-31E7EE884BB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4099C9E-68EF-4889-ADCE-31E7EE884BB6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DECB22B3-A9FB-4153-ACAA-6C60A3A0C1A2}
+	EndGlobalSection
+EndGlobal
