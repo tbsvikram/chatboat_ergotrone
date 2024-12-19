@@ -46,14 +46,14 @@ public class QuestionAnswerAIService : IQuestionAnswerAIService
     /// </summary>
     /// <param name="question">The question to be sent to the AI service.</param>
     /// <returns>A string containing the AI-generated answer or an error message.</returns
-    public async Task<ResponseModel<QuestionAnswerResponse>> AIPostAsync(string question)
+    public async Task<ResponseModel<QuestionAnswerResponse>> AzureAIServiceAsync(string? question)
     {
         ResponseModel<QuestionAnswerResponse> responseModel = new();
         QuestionAnswerResponse questionAnswerResponse = new();
         HttpResponseMessage response = new();
         string responseBody = string.Empty;
 
-        if (string.IsNullOrWhiteSpace(question))    
+        if (string.IsNullOrWhiteSpace(question))
         {
             questionAnswerResponse.answer = string.Empty;
 
@@ -70,12 +70,12 @@ public class QuestionAnswerAIService : IQuestionAnswerAIService
             top = 3,
             question,
             includeUnstructuredSources = true,
-            confidenceScoreThreshold = 0.3,
+            confidenceScoreThreshold = 0.03,
             answerSpanRequest = new
             {
                 enable = false,
                 topAnswersWithSpan = 1,
-                confidenceScoreThreshold = 0.3
+                confidenceScoreThreshold = 0.03
             }
         };
 
@@ -101,7 +101,7 @@ public class QuestionAnswerAIService : IQuestionAnswerAIService
                 var result = JsonSerializer.Deserialize<JsonElement>(responseContent);
                 if (result.TryGetProperty("answers", out JsonElement answers) && answers.GetArrayLength() > 0)
                 {
-                    responseBody = answers[0].GetProperty("answer").GetString() ?? "No answer found.";
+                    responseBody = answers[0].GetProperty("answer").GetString() ?? "No answer found. Try another prompt.";
 
                     if (answers[0].TryGetProperty("metadata", out JsonElement metadata))
                     {
@@ -126,12 +126,12 @@ public class QuestionAnswerAIService : IQuestionAnswerAIService
                 }
                 else
                 {
-                    responseBody = "No answer found.";
+                    responseBody = "No answer found. Try another prompt..";
                 }
 
                 questionAnswerResponse.answer = responseBody;
 
-                
+
 
                 responseModel.Response = questionAnswerResponse;
                 responseModel.ResponseCode = (int)Enums.StatusCode.OK;
@@ -165,8 +165,6 @@ public class QuestionAnswerAIService : IQuestionAnswerAIService
             responseModel.Response = questionAnswerResponse;
             responseModel.ResponseCode = (int)Enums.StatusCode.InternalError;
             responseModel.Message = $"Unexpected error: {ex.Message}";
-            responseModel.Message = "not get Expected Answer how  i can help You";
-           
         }
 
         return responseModel;

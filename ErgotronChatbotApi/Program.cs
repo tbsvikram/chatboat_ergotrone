@@ -16,7 +16,22 @@ builder.Services.AddSwaggerGen();
 builder.Services.RegisterServices();
 builder.Configuration.ConfigureAppSetting();
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost", builder =>
+    {
+        builder.WithOrigins("https://localhost:44346") // Allow the origin
+               .AllowAnyHeader()                     // Allow any header
+               .AllowAnyMethod();                    // Allow any HTTP method
+    });
+});
+
+
 var app = builder.Build();
+
+// Use CORS
+app.UseCors("AllowLocalhost");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

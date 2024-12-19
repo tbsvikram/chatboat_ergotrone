@@ -1,4 +1,5 @@
 ﻿using ErgotronChatbotApi.BAL.Interfaces;
+using ErgotronChatbotApi.Common.Constant;
 using ErgotronChatbotApi.Model;
 
 using Microsoft.AspNetCore.Mvc;
@@ -18,33 +19,44 @@ namespace ErgotronChatbotApi.Controllers
             _questionAnswerAIService = questionAnswerAIService;
         }
 
+        /// <summary>
+        /// Handles the retrieval of an AI-generated answer to a given question and returns a chatbot response.
+        /// </summary>
+        /// <param name="siteId">The optional site ID associated with the query.</param>
+        /// <param name="userId">The optional user ID associated with the query.</param>
+        /// <param name="question">The question to be answered.</param>
+        /// <returns>
+        /// An `IActionResult` containing the response model with the AI-generated answer 
+        /// or an appropriate message if no answer is found.
+        /// </returns>
         [HttpPost("get-question-answer")]
-        public async Task<IActionResult> GetQuestionAnswerAsync(int? siteId, string? userId, string? question)
+        public async Task<IActionResult> GetQuestionAnswerAsync([FromForm] int? siteId, [FromForm] string? userId, [FromForm] string? question)
         {
             var response = new ResponseModel<string>();
-            var answerResponse = await _questionAnswerAIService.AIPostAsync(question);
-            if (!string.IsNullOrEmpty(answerResponse.Response.answer))
+
+            // Get answer from AI service
+            var answerResponse = await _questionAnswerAIService.AzureAIServiceAsync(question);
+
+            // Check if answer exists
+            if (string.IsNullOrEmpty(answerResponse.Response.answer))
             {
-                answerResponse.Response.query = question;
-                response = await _chatbotService.GetQuestionResponseAsync(siteId, userId, answerResponse.Response);
+                response.Response = answerResponse.Message;
+                return Ok(response);
             }
-            else
+
+            // Set query and get chatbot response
+            answerResponse.Response.query = question ?? string.Empty;
+            response = await _chatbotService.GetQuestionResponseAsync(siteId, userId, answerResponse.Response);
+
+            // Check if chatbot response is empty
+            if (string.IsNullOrEmpty(response.Response))
             {
-                response.Message = answerResponse.Message;
+                response.Response = "No answer found. Try another prompt.";
+                response.ResponseCode = (int)Enums.StatusCode.OK;
             }
+
             return Ok(response);
-
-            //QuestionAnswerResponse questionAnswerResponse = new()
-            //{
-            //    answer = "dbo.PrcGetWorkstationUsers",
-            //    query = question,
-            //    metaData = { { "is_count_user", "false" }, { "is_siteid", "true" }, { "is_userid", "true" } }
-
-            //};
-
-            //var response = await _chatbotService.GetQuestionResponseAsync(siteId, userId, questionAnswerResponse);
-
-            //return Ok(response);
         }
+
     }
 }

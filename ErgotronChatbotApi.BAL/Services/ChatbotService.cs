@@ -6,8 +6,11 @@ using ErgotronChatbotApi.Model;
 
 using Newtonsoft.Json.Linq;
 
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ErgotronChatbotApi.BAL.Services
 {
@@ -25,6 +28,7 @@ namespace ErgotronChatbotApi.BAL.Services
 
         // Constants to identify unassigned or invalid asset entries
         private static readonly string[] sourceArray = ["NOT ASSIGNED", "N/A"];
+        private static readonly string Unassigned = "Unassigned";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChatbotService"/> class.
@@ -52,8 +56,8 @@ namespace ErgotronChatbotApi.BAL.Services
             var parm = new Dictionary<string, string>();
 
             // Extract metadata values
-            questionAnswerResponse.metaData.TryGetValue("is_userid", out var is_userid);
-            questionAnswerResponse.metaData.TryGetValue("is_siteid", out var is_siteid);
+            questionAnswerResponse.metaData.TryGetValue(MetaData.is_userid, out var is_userid);
+            questionAnswerResponse.metaData.TryGetValue(MetaData.is_siteid, out var is_siteid);
 
             // Conditionally add parameters based on the metadata values
             if (bool.TryParse(is_userid, out var is_useridExist) && is_useridExist)
@@ -106,7 +110,8 @@ namespace ErgotronChatbotApi.BAL.Services
                                     StoreProcedure.prcDashGetAssetSearchList,
                                     StoreProcedure.roiHighestUsage,
                                     StoreProcedure.chatBotOldestAsset,
-                                    StoreProcedure.roiBusiestDayWeek
+                                    StoreProcedure.roiBusiestDayWeek,
+                                    StoreProcedure.prcDashDrawerLog
                                 };
 
             // Check if the answer matches any valid stored procedure
@@ -138,32 +143,36 @@ namespace ErgotronChatbotApi.BAL.Services
         {
             return new Dictionary<string, Func<JArray, string>>
                 {
-                    { "is_ws_loc", res => GetWorkstationLocationDetails(questionAnswerResponse.query, res) },
-                    { "is_asset_loc", res => GetAssetLocationDetails(res) },
-                    { "is_device_loc", res => GetDeviceLocationDetails(questionAnswerResponse.query, res) },
-                    { "is_all_asset_loc", res => GetAllAssetsLocationDetails(res) },
-                    { "is_count_user", res => GetWorkstationUserDetails(questionAnswerResponse.query, res, questionAnswerResponse.metaData) },
-                    { "subject", res => GetWarrantyDetails(res) },
-                    { "is_last_contact_ws", res => GetWorkStationDetails(questionAnswerResponse.metaData, res, questionAnswerResponse.query) },
-                    { "is_most_dep_ws", res => GetWorkStationDetails(questionAnswerResponse.metaData, res, questionAnswerResponse.query) },
-                    { "is_latestip_ws", res => GetWorkStationDetails(questionAnswerResponse.metaData, res, questionAnswerResponse.query) },
-                    { "is_software_up_date_ws", res => GetWorkStationDetails(questionAnswerResponse.metaData, res, questionAnswerResponse.query) },
-                    { "is_unoccupied_ws", res => GetWorkStationDetails(questionAnswerResponse.metaData, res, questionAnswerResponse.query) },
-                    { "btry_bng_usd", res => GetBattaryUsedDetails(res) },
-                    { "is_expire", res => GetWorkstationWarranties(res, questionAnswerResponse.query, questionAnswerResponse.metaData) },
-                    { "is_online_offline", res => GetAssetReporting(res, questionAnswerResponse.metaData) },
-                    { "frgt_pass", res => AccountForgotPassword() },
-                    { "envy_ws_dtl", res => GetEnvoyWorkstationDetails(res) },
-                    { "workstation_online", res => GetWorkstationHistory(res, questionAnswerResponse.metaData) },
-                    { "chrg_dtl", res => GetChargerDetails(res) },
-                    { "btry_hlth", res => GetBattaryHealth(res) },
-                    { "decommissioned_dtl", res => GetAssetDetails(res) },
-                    { "hgst_usg", res => GetHighestUsage(res) },
-                    { "old_ast", res => GetOldestAsset(res) },
-                    { "btry_chrg_dtl", res => GetBattaryChargeDetails(res, questionAnswerResponse.query) },
-                    { "busist_day_week", res => GetBusiestDayWeek(res) },
+                    { MetaData.is_ws_loc, res => GetWorkstationLocationDetails(questionAnswerResponse.query, res) },
+                    { MetaData.is_asset_loc, res => GetAssetLocationDetails(res) },
+                    { MetaData.is_device_loc, res => GetDeviceLocationDetails(questionAnswerResponse.query, res) },
+                    { MetaData.is_all_asset_loc, res => GetAllAssetsLocationDetails(res) },
+                    { MetaData.is_count_user, res => GetWorkstationUserDetails(questionAnswerResponse.query, res, questionAnswerResponse.metaData) },
+                    { MetaData.subject, res => GetWarrantyDetails(res) },
+                    { MetaData.is_last_contact_ws, res => GetWorkStationDetails(questionAnswerResponse.metaData, res, questionAnswerResponse.query) },
+                    { MetaData.is_most_dep_ws, res => GetWorkStationDetails(questionAnswerResponse.metaData, res, questionAnswerResponse.query) },
+                    { MetaData.is_latestip_ws, res => GetWorkStationDetails(questionAnswerResponse.metaData, res, questionAnswerResponse.query) },
+                    { MetaData.is_software_up_date_ws, res => GetWorkStationDetails(questionAnswerResponse.metaData, res, questionAnswerResponse.query) },
+                    { MetaData.is_unoccupied_ws, res => GetWorkStationDetails(questionAnswerResponse.metaData, res, questionAnswerResponse.query) },
+                    { MetaData.btry_bng_usd, res => GetBattaryUsedDetails(res) },
+                    { MetaData.is_expire, res => GetWorkstationWarranties(res, questionAnswerResponse.query, questionAnswerResponse.metaData) },
+                    { MetaData.is_online_offline, res => GetAssetReporting(res, questionAnswerResponse.metaData) },
+                    { MetaData.frgt_pass, res => AccountForgotPassword() },
+                    { MetaData.envy_ws_dtl, res => GetEnvoyWorkstationDetails(res) },
+                    { MetaData.workstation_online, res => GetWorkstationHistory(res, questionAnswerResponse.metaData) },
+                    { MetaData.chrg_dtl, res => GetChargerDetails(res) },
+                    { MetaData.btry_hlth, res => GetBattaryHealth(res) },
+                    { MetaData.decommissioned_dtl, res => GetAssetDetails(res) },
+                    { MetaData.hgst_usg, res => GetHighestUsage(res) },
+                    { MetaData.old_ast, res => GetOldestAsset(res) },
+                    { MetaData.btry_chrg_dtl, res => GetBattaryChargeDetails(res, questionAnswerResponse.query) },
+                    { MetaData.busist_day_week, res => GetBusiestDayWeek(res) },
+                    { MetaData.ws_log, res => GetWorkstationlog(res,questionAnswerResponse.query) },
+                    { MetaData.ws_pwr_off, res => GetWorkstationPower(res,questionAnswerResponse.query) },
                 };
         }
+
+
         #endregion
 
         #region WarrantyDetails
@@ -303,7 +312,7 @@ namespace ErgotronChatbotApi.BAL.Services
                     if (!sourceArray.Contains(asset, StringComparer.OrdinalIgnoreCase))
                     {
                         // Initialize floor in the dictionary if not present
-                        if (!floor.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
+                        if (!floor.Equals(Unassigned, StringComparison.OrdinalIgnoreCase))
                         {
                             if (!floorWingAssetCounter.ContainsKey(floor))
                             {
@@ -311,7 +320,7 @@ namespace ErgotronChatbotApi.BAL.Services
                             }
 
                             // Initialize wing in the floor dictionary if not present
-                            if (!wing.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
+                            if (!wing.Equals(Unassigned, StringComparison.OrdinalIgnoreCase))
                             {
                                 if (!floorWingAssetCounter[floor].ContainsKey(wing))
                                 {
@@ -383,11 +392,11 @@ namespace ErgotronChatbotApi.BAL.Services
                     var finalData = filteredItems.FirstOrDefault();
 
                     // Build the response string with the location details
-                    responseString.Append($"The device <b>{serialNo}</b> is located on Floor <b>{finalData.Floor}</b>, ");
-                    responseString.Append($"<b>{finalData.Wing}</b> Wing, in the <b>{finalData.Department}</b> Department.");
+                    responseString.Append($"The device <b>{serialNo}</b> is located on Floor <b>{finalData?.Floor}</b>, ");
+                    responseString.Append($"<b>{finalData?.Wing}</b> Wing, in the <b>{finalData?.Department}</b> Department.");
 
                     // Add location if it is not "N/A"
-                    if (!string.IsNullOrWhiteSpace(finalData.Location) && !finalData.Location.Equals("N/A", StringComparison.OrdinalIgnoreCase))
+                    if (!string.IsNullOrWhiteSpace(finalData?.Location) && !finalData.Location.Equals("N/A", StringComparison.OrdinalIgnoreCase))
                     {
                         responseString.Append($" Location <b>{finalData.Location}</b>.");
                     }
@@ -435,13 +444,7 @@ namespace ErgotronChatbotApi.BAL.Services
         {
             StringBuilder locationDetails = new();
 
-            locationDetails.Append($"The device <b>{location.SerialNo}</b> is located on Floor <b>{location.Floor}</b> ");
-            locationDetails.Append($"<b>{location.Wing}</b> Wing, in the <b>{location.Department}</b> Department.");
-
-            if (!string.IsNullOrWhiteSpace(location.Location) && !location.Location.Equals("N/A", StringComparison.OrdinalIgnoreCase))
-            {
-                locationDetails.Append($" Location <b>{location.Location}</b>.");
-            }
+            locationDetails.Append($"Workstation <b>{location.SerialNo}</b> is located in <b>{location.Location}</b>, <b>{location.Department}</b>, on <b>{location.Floor}</b>, <b>{location.Wing}</b>");
 
             return locationDetails.ToString();
         }
@@ -459,19 +462,21 @@ namespace ErgotronChatbotApi.BAL.Services
         /// <returns>A string containing an HTML formatted list of users or a message about the workstation.</returns>
         private static string GetWorkstationUserDetails(string query, JArray data, Dictionary<string, string> metaDataValue)
         {
+            var responseString = new StringBuilder();
+
             if (data == null || !data.Any())
             {
-                return "No data available.";
+                responseString.Append("No data available.");
             }
 
             string serialNo = Helper.ExtractNo(query);
             if (string.IsNullOrEmpty(serialNo))
             {
-                return "Kindly provide a workstation id.";
+                responseString.Append("Kindly provide a workstation id.");
             }
 
             var dashAssetTrackings = data.ToObject<List<WorkstationUserDetails>>();
-            var filteredResult = dashAssetTrackings?.Where(item => item.WorkstationUserID == Convert.ToInt32(serialNo)).ToList();
+            var filteredResult = dashAssetTrackings?.Where(item => item.WorkstationUserID == Convert.ToInt64(serialNo)).ToList();
 
             if (filteredResult == null || !filteredResult.Any())
             {
@@ -484,7 +489,7 @@ namespace ErgotronChatbotApi.BAL.Services
                 ? filteredResult.OrderByDescending(p => p.UniqueID).Take(10)
                 : filteredResult;
 
-            var responseString = new StringBuilder("The following user(s) have previously used this workstation:<ul>");
+            responseString.Append("The following user(s) have previously used this workstation:<ul>");
 
             foreach (var item in resultToDisplay)
             {
@@ -512,10 +517,10 @@ namespace ErgotronChatbotApi.BAL.Services
             var workstationDetails = data.ToObject<List<WorkstationDetails>>();
 
             // Try to retrieve meta-data flags
-            metaData.TryGetValue("is_last_contact_ws", out var isLastContactWs);
-            metaData.TryGetValue("is_software_up_date_ws", out var isSoftwareUpDateWs);
-            metaData.TryGetValue("is_most_dep_ws", out var isMostDepWs);
-            metaData.TryGetValue("is_latestip_ws", out var isLatestIpWs);
+            metaData.TryGetValue(MetaData.is_last_contact_ws, out var isLastContactWs);
+            metaData.TryGetValue(MetaData.is_software_up_date_ws, out var isSoftwareUpDateWs);
+            metaData.TryGetValue(MetaData.is_most_dep_ws, out var isMostDepWs);
+            metaData.TryGetValue(MetaData.is_latestip_ws, out var isLatestIpWs);
 
             // Check for 'is_last_contact_ws' flag and process the last contact information
             if (bool.TryParse(isLastContactWs, out var isLastContact) && isLastContact)
@@ -585,7 +590,7 @@ namespace ErgotronChatbotApi.BAL.Services
         private static void ProcessMostDep(List<WorkstationDetails> workstationDetails, StringBuilder response)
         {
             var departmentCount = workstationDetails
-                .GroupBy(item => item.DepartmentAssigned ?? "Unassigned")
+                .GroupBy(item => item.DepartmentAssigned ?? Unassigned)
                 .ToDictionary(g => g.Key, g => g.Count());
 
             if (departmentCount.Any())
@@ -593,7 +598,7 @@ namespace ErgotronChatbotApi.BAL.Services
                 var formattedOutput = new StringBuilder("<ul>");
                 foreach (var (department, count) in departmentCount)
                 {
-                    if (!department.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
+                    if (!department.Equals(Unassigned, StringComparison.OrdinalIgnoreCase))
                     {
                         formattedOutput.Append($"<li>{department}: {count} workstation{(count > 1 ? "s" : string.Empty)}</li>");
                     }
@@ -628,7 +633,7 @@ namespace ErgotronChatbotApi.BAL.Services
         private static void ProcessUnoccupiedWorkstations(List<WorkstationDetails> workstationDetails, StringBuilder response)
         {
             var unassignedWorkstations = workstationDetails
-                .Where(item => item.DepartmentAssigned == "Unassigned" && item.Location == "Unassigned")
+                .Where(item => item.DepartmentAssigned == Unassigned && item.Location == Unassigned)
                 .ToList();
 
             if (unassignedWorkstations.Any())
@@ -732,7 +737,7 @@ namespace ErgotronChatbotApi.BAL.Services
                     if (batteryDetail != null)
                     {
                         // Append the battery usage details if a match is found
-                        stringBuilder.Append($"The workstation <b>{serialNo}</b> was last used on <b>{batteryDetail.LastPostDateUTC}</b>, with a charge level of <b>{batteryDetail.ChargeLevel}%</b>.");
+                        stringBuilder.Append($"The battery <b>{batteryDetail.Description}</b> has a charge level of <b>{batteryDetail.ChargeLevel}</b> and was last used on <b>{batteryDetail.LastUsed}</b>");
                     }
                     else
                     {
@@ -770,7 +775,7 @@ namespace ErgotronChatbotApi.BAL.Services
             var stringBuilder = new StringBuilder();
 
             // Retrieve the "is_expire" metadata value (if present)
-            metaDataValue.TryGetValue("is_expire", out var isExpireValue);
+            metaDataValue.TryGetValue(MetaData.is_expire, out var isExpireValue);
 
             // Extract the serial number from the query string
             var serialNo = Helper.ExtractNo(query);
@@ -792,7 +797,7 @@ namespace ErgotronChatbotApi.BAL.Services
 
                 // Filter warranty details based on expiration date
                 var expiredItems = warrantyDetails
-                    .Where(item => item.WarrantyEndDate != "N/A" && DateTime.TryParseExact(item.WarrantyEndDate, "MM-dd-yy", null, System.Globalization.DateTimeStyles.None, out var warrantyEndDate)
+                    .Where(item => item.WarrantyEndDate != "N/A" && DateTime.TryParseExact(item.WarrantyEndDate, "MM-dd-yy", null, DateTimeStyles.None, out DateTime warrantyEndDate)
                         && (today > warrantyEndDate || (today.Year == warrantyEndDate.Year && today.Month == warrantyEndDate.Month)))
                     .OrderBy(item => DateTime.ParseExact(item.WarrantyEndDate, "MM-dd-yy", null))
                     .ToList();
@@ -848,7 +853,7 @@ namespace ErgotronChatbotApi.BAL.Services
             var assetReporting = res.ToObject<List<AssetsReportingDetails>>();
 
             // Retrieve the first asset reporting entry (assuming there's at least one entry)
-            var asset = assetReporting.FirstOrDefault();
+            var asset = assetReporting?.FirstOrDefault();
 
             // If no asset data is available, return a message indicating no data
             if (asset == null)
@@ -858,22 +863,15 @@ namespace ErgotronChatbotApi.BAL.Services
             }
 
             // Conditionally add parameters based on the metadata values
-            metaData.TryGetValue("is_online_offline", out var isOnlineOffline);
+            metaData.TryGetValue(MetaData.is_online_offline, out var isOnlineOffline);
 
             if (bool.TryParse(isOnlineOffline, out var is_online_offline) && is_online_offline)
             {
-                // Calculate online and offline assets
-                int assetsReporting = asset.AssetsReporting;
-                int assetsTotal = asset.AssetsTotal;
-                int assetsOffline = assetsTotal - assetsReporting;
-
-                // Append the online/offline asset count to the response
-                responseString.Append($"Total fleet online: <b>{assetsReporting}</b>, offline: <b>{assetsOffline}</b>");
+                responseString.Append($"<b>{asset.AssetsReporting}</b> assets are online out of a total of <b>{asset.AssetsTotal}</b> assets, with the remaining being offline.");
             }
             else
             {
-                // Return overall health percentage if "is_online_offline" is not "true"
-                responseString.Append($"Overall health: <b>{asset.AssetsReportingPct}%</b>");
+                responseString.Append($"You have <b>{asset.AssetsTotal} </b> assets of which <b>{asset.AssetsReportingPct}%</b> are currently in use.");
             }
             return responseString.ToString();
         }
@@ -933,7 +931,7 @@ namespace ErgotronChatbotApi.BAL.Services
                         // Provide default values if any property is null or empty
                         string workstation = string.IsNullOrEmpty(item.Workstation) ? "N/A" : item.Workstation;
                         string description = string.IsNullOrEmpty(item.Description) ? "N/A" : item.Description;
-                        string lockTimeout = item.MedbinLockTimeout > 0 ? item.MedbinLockTimeout.ToString() : "N/A";
+                        string? lockTimeout = item.MedbinLockTimeout > 0 ? item.MedbinLockTimeout.ToString() : "N/A";
 
                         // Append formatted details to the response string
                         responseString.AppendFormat(
@@ -981,7 +979,7 @@ namespace ErgotronChatbotApi.BAL.Services
             var data = res.ToObject<List<WorkstationHistory>>();
 
             // Get the first workstation history entry
-            var workStationHistory = data.FirstOrDefault();
+            var workStationHistory = data?.FirstOrDefault();
 
             // If no workstation history is available, return an appropriate message
             if (workStationHistory == null) return "No workstation history found.";
@@ -990,7 +988,7 @@ namespace ErgotronChatbotApi.BAL.Services
             var responseString = new StringBuilder();
 
             // Check the metadata for the 'workstation_online' key to determine the status
-            metaData.TryGetValue("workstation_online", out var workstationOnline);
+            metaData.TryGetValue(MetaData.workstation_online, out var workstationOnline);
 
             // Conditionally add parameters based on the metadata values
             if (bool.TryParse(workstationOnline, out var workstationOnline_false) && !workstationOnline_false)
@@ -1023,7 +1021,7 @@ namespace ErgotronChatbotApi.BAL.Services
             var data = res.ToObject<List<WorkstationHistory>>();
 
             // Return formatted string with the count of chargers
-            return $"We have <b>{data.Count}</b> Chargers.";
+            return $"We have <b>{data?.Count}</b> Chargers.";
         }
         #endregion
 
@@ -1043,7 +1041,7 @@ namespace ErgotronChatbotApi.BAL.Services
             var data = res.ToObject<List<BatteryHealthDetails>>();
 
             // Return formatted string with the count of batteries
-            return $"We have <b>{data.Count}</b> batteries.";
+            return $"We have <b>{data?.Count}</b> batteries.";
         }
         #endregion
 
@@ -1065,12 +1063,12 @@ namespace ErgotronChatbotApi.BAL.Services
 
             // Initialize StringBuilder for building response
             var responseString = new StringBuilder();
-            responseString.Append("The provided data does not specify which carts were decommissioned and removed from Rhythm. The data includes a list of carts with their serial numbers, but it does not indicate their decommissioning status.");
+            responseString.Append("Here is a list of decommissioned carts ready to be removed from Rhythm:");
 
             // Filter and construct list of valid items
             var filteredItems = data
-                .Where(item => !string.IsNullOrEmpty(item.CartSerial) && item.CartSerial.Any(char.IsDigit) && !string.IsNullOrEmpty(item.SerialNo))
-                .Select(item => $"<li>{item.SerialNo} | {item.IP}</li>")
+                .Where(item => string.IsNullOrEmpty(item.IP))
+                .Select(item => $"<li>Serial Number: {item.SerialNo}</li>")
                 .ToList();
 
             // If there are valid items, create the unordered list
@@ -1108,7 +1106,7 @@ namespace ErgotronChatbotApi.BAL.Services
                 var finalData = usageDetails.FirstOrDefault();
 
                 // Check if 'highestUsed' value is greater than 0
-                if (finalData.highestUsed > 0)
+                if (finalData?.highestUsed > 0)
                 {
                     stringBuilder.Append($"Your peak usage is <b>{finalData.highestUsed}</b>.");
                 }
@@ -1146,11 +1144,14 @@ namespace ErgotronChatbotApi.BAL.Services
             {
                 var finalData = data.FirstOrDefault();
 
-                DateTime manufacturingDate = DateTime.Parse(Convert.ToString(finalData.CreatedDateUTC));
-
-                responseString.Append($"The oldest asset still in production is Workstation <b>{finalData.SerialNo}</b>, " +
-                                  "an Envoy Corded Phosphate Workstation with a manufacturing date of <b>" +
-                                  manufacturingDate.Date.ToString("yyyy-MM-dd") + "</b>.");
+                if (finalData != null)
+                {
+                    responseString.Append($"The oldest asset still in production is <b>{finalData.Description}</b> serial <b>{finalData.SerialNo}</b> last posted date was <b>{finalData.LastPostDateUTC}</b>");
+                }
+                else
+                {
+                    responseString.Append("No answer found. Try another prompt.");
+                }
             }
             else
             {
@@ -1179,9 +1180,10 @@ namespace ErgotronChatbotApi.BAL.Services
             if (data != null && data.Count > 0)
             {
                 var finalData = data.FirstOrDefault();
+
                 if (finalData != null)
                 {
-                    responseString.Append($"The busiest day is <b>{finalData.PeakDayName}</b>, with a peak of <b>{finalData.PeakCarts}</b> carts. On average, <b>{finalData.AvgCarts}</b> carts are used, and the maximum number of carts at any time is <b>{finalData.MaxCarts}</b>.");
+                    responseString.Append($"<b>{finalData.PeakDayName}</b> is busiest day of the week.");
                 }
                 else
                 {
@@ -1195,5 +1197,93 @@ namespace ErgotronChatbotApi.BAL.Services
             return responseString.ToString();
         }
         #endregion
+
+        #region Get Workstation log
+        /// <summary>
+        /// Retrieves a list of workstation logs that match the given serial number and time extracted from the query string.
+        /// The method parses the provided query to extract the serial number and time, searches through the provided log data,
+        /// and returns an HTML-formatted string containing the details of the matching logs, or a message if no matches are found.
+        /// </summary>
+        /// <param name="jArray">A JSON array containing a list of workstation log entries.</param>
+        /// <param name="query">A string query containing a serial number and a time (in MM/dd/yyyy HH:mm:ss format) to search for in the logs.</param>
+        /// <returns>
+        /// An HTML-formatted string with a list of logs that match the given serial number and time.
+        /// If no matching logs are found, a message indicating no data is available is returned.
+        /// </returns>
+        public static string GetWorkstationlog(JArray jArray, string query)
+        {
+            // Initialize response builder and result list
+            var responseString = new StringBuilder();
+
+            // Extract serial number and time from the query
+            var serialNo = Helper.ExtractNo(query);
+
+            // Extract serial number and time from the query
+            var date = Helper.ExtractDate(query);
+
+            // Convert the JSON array to a list of workstation logs
+            var data = jArray.ToObject<List<WorkstationLog>>();
+            if (data == null || data.Count == 0)
+            {
+                responseString.Append("No data available to process the query.");
+            }
+
+            // Filter logs that match the serial number and time
+            var result = data?.Where(log => log.SerialNo == serialNo && Convert.ToDateTime(log.LocalTime).Date == Convert.ToDateTime(date).Date)
+                        .FirstOrDefault();
+
+
+            // Construct response string
+            if (result != null)
+            {
+                responseString.Append($"The MedBins of <b>{serialNo}</b> were accessed on <b>{date}</b> by <b>{result.FirstName}</b> <b>{result.LastName}</b> at <b>{result.LocalTime}</b>. The following drawers were accessed: <b>{result.Drawer}</b>");
+            }
+            else
+            {
+                responseString.Append("No battery details found. Try another prompt.");
+            }
+
+            return responseString.ToString();
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="res"></param>
+        /// <returns></returns>
+        private static string GetWorkstationPower(JArray res, string query)
+        {
+            // Initialize response builder and result list
+            var responseString = new StringBuilder();
+
+            // Extract serial number and time from the query
+            var serialNo = Helper.ExtractNo(query);
+            if (string.IsNullOrEmpty(serialNo))
+            {
+                responseString.Append("Kindly provide a workstation id.");
+            }
+
+            // Convert the JSON array to a list of workstation logs
+            var data = res.ToObject<List<DashAssetTracking>>();
+            if (data == null || data.Count == 0)
+            {
+                responseString.Append("No data available to process the query.");
+            }
+
+            var result = data?.FirstOrDefault(p => p.SerialNo == serialNo);
+
+            if (result != null)
+            {
+                responseString.AppendFormat("The last known location of workstation <b>{0}</b> was &lt;<b>{1}</b>, <b>{2}</b>, <b>{3}</b>, <b>{4}</b>&gt; LastReportDate of <b>{5}</b>", serialNo, result.Department, result.Floor, result.Wing, result.Location, result.LastReported);
+            }
+            else
+            {
+                responseString.AppendFormat("The last known location of workstation {0} is not available", serialNo);
+            }
+
+            return responseString.ToString();
+        }
     }
 }

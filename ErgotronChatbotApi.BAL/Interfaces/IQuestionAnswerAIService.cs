@@ -4,6 +4,6 @@ namespace ErgotronChatbotApi.BAL.Interfaces
 {
     public interface IQuestionAnswerAIService
     {
-        public Task<ResponseModel<QuestionAnswerResponse>> AIPostAsync(string question);
+        public Task<ResponseModel<QuestionAnswerResponse>> AzureAIServiceAsync(string? question);
     }
 }

@@ -1,12 +1,20 @@
-﻿namespace ErgotronChatbotApi.Model
+﻿using Newtonsoft.Json;
+
+namespace ErgotronChatbotApi.Model
 {
     public class EnvoyWorkstationDetails
     {
         public string Workstation { get; set; }
         public string Description { get; set; }
         public string AssetNumber { get; set; }
+
+        [JsonProperty("Last Reported")]
         public string LastReported { get; set; }
+
+        [JsonProperty("Department Reporting")]
         public string DepartmentReporting { get; set; }
+
+        [JsonProperty("Floor Reporting")]
         public string FloorReporting { get; set; }
         public string StartUpdateAllow { get; set; }
         public string EndUpdateAllow { get; set; }
