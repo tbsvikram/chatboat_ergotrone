@@ -23,7 +23,8 @@ builder.Services.AddCors(options =>
     {
         builder.WithOrigins("https://localhost:44346") // Allow the origin
                .AllowAnyHeader()                     // Allow any header
-               .AllowAnyMethod();                    // Allow any HTTP method
+               .AllowAnyMethod()                  // Allow any HTTP method
+               .AllowCredentials();              // Allow cookies/authentication headers if needed
     });
 });
 
@@ -39,6 +40,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapGet("/", () => "Welcome to the API. Use /api/{controller}/{action} to access endpoints.");
 
 app.UseHttpsRedirection();
 

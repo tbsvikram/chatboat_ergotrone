@@ -2,12 +2,14 @@
 using ErgotronChatbotApi.Common.Constant;
 using ErgotronChatbotApi.Model;
 
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ErgotronChatbotApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [EnableCors("AllowLocalhost")]
     public class ChatbotController : ControllerBase
     {
         private readonly IChatbotService _chatbotService;
