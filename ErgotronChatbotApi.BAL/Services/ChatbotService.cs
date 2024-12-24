@@ -6,11 +6,8 @@ using ErgotronChatbotApi.Model;
 
 using Newtonsoft.Json.Linq;
 
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ErgotronChatbotApi.BAL.Services
 {
@@ -175,7 +172,7 @@ namespace ErgotronChatbotApi.BAL.Services
 
         #endregion
 
-        #region WarrantyDetails
+        #region Warranty Details
         /// <summary>
         /// Generates an HTML string listing batteries that need replacement based on their warranty status and end date.
         /// Filters out batteries that are expired or have a warranty end date in the past.
@@ -230,7 +227,7 @@ namespace ErgotronChatbotApi.BAL.Services
         }
 
         // Helper method to generate an HTML message
-        private static string GenerateHtmlMessage(string message, List<string> items = null)
+        private static string GenerateHtmlMessage(string message, List<string>? items = null)
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("<ul>");
@@ -249,7 +246,7 @@ namespace ErgotronChatbotApi.BAL.Services
         }
         #endregion
 
-        #region Get Location of workstations, assets
+        #region Location of workstations, assets
         /// <summary>
         /// Generates an HTML string listing all asset locations from the given data.
         /// Filters out entries with asset numbers "NOT ASSIGNED" or "N/A" and excludes entries with empty or "N/A" locations.
@@ -450,7 +447,7 @@ namespace ErgotronChatbotApi.BAL.Services
         }
         #endregion
 
-        #region Get User Workstation details
+        #region User Workstation details
         /// <summary>
         /// Processes the provided query and JArray to retrieve and format user details associated with a specific workstation.
         /// The method extracts the workstation serial number from the query, filters the data to find users linked to that workstation ID,
@@ -502,7 +499,7 @@ namespace ErgotronChatbotApi.BAL.Services
         }
         #endregion
 
-        #region Get Workstation details
+        #region Workstation details
         /// <summary>
         /// Retrieves and formats workstation details based on provided metadata and query parameters.
         /// </summary>
@@ -708,7 +705,6 @@ namespace ErgotronChatbotApi.BAL.Services
             return stringBuilder.ToString();
         }
 
-
         /// <summary>
         /// Retrieves and formats battery charge details for a specific workstation based on its serial number.
         /// </summary>
@@ -754,7 +750,7 @@ namespace ErgotronChatbotApi.BAL.Services
             else
             {
                 // Append a message if no battery details are available
-                stringBuilder.Append("No battery details found. Try another prompt.");
+                stringBuilder.Append("No battery charge details found. Try another prompt.");
             }
 
             return stringBuilder.ToString();
@@ -877,7 +873,7 @@ namespace ErgotronChatbotApi.BAL.Services
         }
         #endregion
 
-        #region Asset Reporting
+        #region Account Forgot Password
         /// <summary>
         /// Generates a response string with a link to the forgot password page and instructions for contacting ModCart support.
         /// </summary>
@@ -899,7 +895,7 @@ namespace ErgotronChatbotApi.BAL.Services
         }
         #endregion
 
-        #region Envoy Workstation
+        #region Envoy Workstation Details
         /// <summary>
         /// Processes a given JArray containing Envoy workstation details and returns a formatted string
         /// listing workstations with Medbin enabled, including their workstation name, description, and lock timeout.
@@ -1025,7 +1021,7 @@ namespace ErgotronChatbotApi.BAL.Services
         }
         #endregion
 
-        #region Get Battary Health
+        #region Battary Health
         /// <summary>
         /// Processes a given JArray containing battery health details and returns a formatted string with the count of batteries.
         /// The number of batteries is extracted from the provided data and displayed in a simple HTML format.
@@ -1045,7 +1041,7 @@ namespace ErgotronChatbotApi.BAL.Services
         }
         #endregion
 
-        #region Get Asset Details
+        #region Asset Details
         /// <summary>
         /// Processes a given JArray containing asset details and returns a formatted string listing valid assets.
         /// The assets are filtered based on their `CartSerial` containing digits and a valid `SerialNo`. 
@@ -1068,7 +1064,7 @@ namespace ErgotronChatbotApi.BAL.Services
             // Filter and construct list of valid items
             var filteredItems = data
                 .Where(item => string.IsNullOrEmpty(item.IP))
-                .Select(item => $"<li>Serial Number: {item.SerialNo}</li>")
+                .Select(item => $"<b><li>Serial Number: {item.SerialNo}</li></b>")
                 .ToList();
 
             // If there are valid items, create the unordered list
@@ -1083,7 +1079,7 @@ namespace ErgotronChatbotApi.BAL.Services
         }
         #endregion
 
-        #region Get Highest Usage
+        #region Highest Usage
         /// <summary>
         /// Retrieves the highest usage value from the provided JArray.
         /// If the usage data is available and the 'highestUsed' value is greater than 0, it returns the peak usage formatted in HTML.
@@ -1108,7 +1104,7 @@ namespace ErgotronChatbotApi.BAL.Services
                 // Check if 'highestUsed' value is greater than 0
                 if (finalData?.highestUsed > 0)
                 {
-                    stringBuilder.Append($"Your peak usage is <b>{finalData.highestUsed}</b>.");
+                    stringBuilder.Append($"Your peak usage is <b>{finalData.highestPercent}%</b>, with <b>{finalData.highestUsed}</b> used out of <b>{finalData.totalObjects}</b>.");
                 }
                 else
                 {
@@ -1123,7 +1119,7 @@ namespace ErgotronChatbotApi.BAL.Services
         }
         #endregion
 
-        #region Get Oldest Asset
+        #region Oldest Asset
         /// <summary>
         /// Retrieves and formats information about the oldest asset still in production from a given JSON array of asset data.
         /// The method identifies the first asset in the list and extracts its serial number and manufacturing date, 
@@ -1150,7 +1146,7 @@ namespace ErgotronChatbotApi.BAL.Services
                 }
                 else
                 {
-                    responseString.Append("No answer found. Try another prompt.");
+                    responseString.Append("The oldest asset is no longer in production.");
                 }
             }
             else
@@ -1161,7 +1157,7 @@ namespace ErgotronChatbotApi.BAL.Services
         }
         #endregion
 
-        #region Get Busiest DayWeek
+        #region Busiest Day Week
         /// <summary>
         /// Generates a summary of the busiest day of the week based on the provided data.
         /// </summary>
@@ -1198,7 +1194,7 @@ namespace ErgotronChatbotApi.BAL.Services
         }
         #endregion
 
-        #region Get Workstation log
+        #region Workstation log
         /// <summary>
         /// Retrieves a list of workstation logs that match the given serial number and time extracted from the query string.
         /// The method parses the provided query to extract the serial number and time, searches through the provided log data,
@@ -1240,7 +1236,7 @@ namespace ErgotronChatbotApi.BAL.Services
             }
             else
             {
-                responseString.Append("No battery details found. Try another prompt.");
+                responseString.Append("No answer found. Try another prompt.");
             }
 
             return responseString.ToString();
@@ -1248,11 +1244,13 @@ namespace ErgotronChatbotApi.BAL.Services
 
         #endregion
 
+        #region Workstation Power
         /// <summary>
-        /// 
+        /// Retrieves the power and location details of a workstation based on the provided serial number from a JSON array of logs.
         /// </summary>
-        /// <param name="res"></param>
-        /// <returns></returns>
+        /// <param name="res">The JSON array containing workstation logs.</param>
+        /// <param name="query">The query string containing the workstation serial number.</param>
+        /// <returns>A formatted string describing the workstation's last known location and report date, or an appropriate error message.</returns>
         private static string GetWorkstationPower(JArray res, string query)
         {
             // Initialize response builder and result list
@@ -1285,5 +1283,6 @@ namespace ErgotronChatbotApi.BAL.Services
 
             return responseString.ToString();
         }
+        #endregion
     }
 }
