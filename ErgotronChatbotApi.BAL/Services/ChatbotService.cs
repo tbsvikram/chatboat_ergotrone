@@ -90,26 +90,7 @@ namespace ErgotronChatbotApi.BAL.Services
             var metaDataMap = GetFunction(questionAnswerResponse);
 
             // List of valid stored procedures for matching
-            var validProcedures = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                                {
-                                    StoreProcedure.prcDashAssetTracking,
-                                    StoreProcedure.prcGetWorkstationUsers,
-                                    StoreProcedure.prcDashGetBatteryWarranties,
-                                    StoreProcedure.prcDashGetWorkstations,
-                                    StoreProcedure.prcDashGetBattery,
-                                    StoreProcedure.prcDashGetWorkstationWarranties,
-                                    StoreProcedure.prcDashAssetsReporting,
-                                    StoreProcedure.prcDashGetUsersBySite,
-                                    StoreProcedure.prcDashGetEnvoyWorkstations,
-                                    StoreProcedure.prcGetOnlineWorkstationCountHistory,
-                                    StoreProcedure.prcDashGetCharger,
-                                    StoreProcedure.spDashboardBatteryHealthLevels,
-                                    StoreProcedure.prcDashGetAssetSearchList,
-                                    StoreProcedure.roiHighestUsage,
-                                    StoreProcedure.chatBotOldestAsset,
-                                    StoreProcedure.roiBusiestDayWeek,
-                                    StoreProcedure.prcDashDrawerLog
-                                };
+            var validProcedures = GetScripts();
 
             // Check if the answer matches any valid stored procedure
             if (validProcedures.Contains(questionAnswerResponse.answer))
@@ -169,7 +150,38 @@ namespace ErgotronChatbotApi.BAL.Services
                 };
         }
 
+        /// <summary>
+        /// Retrieves a collection of valid stored procedure names used within the application.
+        /// The procedure names are stored in a case-insensitive hash set for efficient lookup.
+        /// </summary>
+        /// <returns>
+        /// A HashSet of strings containing the names of the valid stored procedures.
+        /// </returns>
+        private static HashSet<string> GetScripts()
+        {
+            var validProcedures = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                                {
+                                    StoreProcedure.prcDashAssetTracking,
+                                    StoreProcedure.prcGetWorkstationUsers,
+                                    StoreProcedure.prcDashGetBatteryWarranties,
+                                    StoreProcedure.prcDashGetWorkstations,
+                                    StoreProcedure.prcDashGetBattery,
+                                    StoreProcedure.prcDashGetWorkstationWarranties,
+                                    StoreProcedure.prcDashAssetsReporting,
+                                    StoreProcedure.prcDashGetUsersBySite,
+                                    StoreProcedure.prcDashGetEnvoyWorkstations,
+                                    StoreProcedure.prcGetOnlineWorkstationCountHistory,
+                                    StoreProcedure.prcDashGetCharger,
+                                    StoreProcedure.spDashboardBatteryHealthLevels,
+                                    StoreProcedure.prcDashGetAssetSearchList,
+                                    StoreProcedure.roiHighestUsage,
+                                    StoreProcedure.chatBotOldestAsset,
+                                    StoreProcedure.roiBusiestDayWeek,
+                                    StoreProcedure.prcDashDrawerLog
+                                };
 
+            return validProcedures;
+        }
         #endregion
 
         #region Warranty Details
@@ -597,7 +609,7 @@ namespace ErgotronChatbotApi.BAL.Services
                 {
                     if (!department.Equals(Unassigned, StringComparison.OrdinalIgnoreCase))
                     {
-                        formattedOutput.Append($"<li>{department}: {count} workstation{(count > 1 ? "s" : string.Empty)}</li>");
+                        formattedOutput.Append($"<li><b>{department}: {count} workstation{(count > 1 ? "s" : string.Empty)}</b></li>");
                     }
                 }
                 formattedOutput.Append("</ul>");
@@ -618,7 +630,7 @@ namespace ErgotronChatbotApi.BAL.Services
 
             if (workstation != null)
             {
-                response.Append($"Info for workstation <b>{workstationName}</b>:<br>IP Address: {workstation.IP ?? "N/A"}<br>MAC Address: {workstation.DeviceMAC ?? "N/A"}");
+                response.Append($"Info for workstation <b>{workstationName}</b>:<br>IP Address: <b>{workstation.IP ?? "N/A"}</b><br>MAC Address: <b>{workstation.DeviceMAC ?? "N/A"}</b>");
             }
             else
             {
