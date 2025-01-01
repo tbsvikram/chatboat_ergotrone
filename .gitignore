@@ -7,7 +7,6 @@ Release/
 # User-specific files
 *.user
 *.vs/
-.vscode/
 .idea/
 
 # Logs
@@ -65,8 +64,8 @@ publish/
 
 # Visual Studio Code
 .history/
-.vscode/*
 
 # Tooling-related
 *.lock.json
 global.json
+config.bat
