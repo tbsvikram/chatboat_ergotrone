@@ -275,16 +275,29 @@ namespace ErgotronChatbotApi.BAL.Services
             {
                 // Convert JArray to a list of DashAssetTracking objects
                 var dashAssetTrackings = data.ToObject<List<DashAssetTracking>>();
-                responseString.Append("Kindly check given below details of all Assets and Current Location : <ul>");
-                foreach (var entry in dashAssetTrackings)
+                if (dashAssetTrackings.Any())
                 {
-                    // Exclude entries with "NOT ASSIGNED" or "N/A" asset numbers
-                    if (!sourceArray.Contains(entry.AssetNumber, StringComparer.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(entry.Location) && !entry.Location.Equals("N/A", StringComparison.OrdinalIgnoreCase))
+                    responseString.Append("Kindly check given below details of all Assets and Current Location : <ul>");
+                    foreach (var entry in dashAssetTrackings)
                     {
-                        responseString.AppendFormat("<li>Asset: {0}, Location: {1}</li>", entry.AssetNumber, entry.Location);
+                        // Exclude entries with "NOT ASSIGNED" or "N/A" asset numbers
+                        if (!sourceArray.Contains(entry.AssetNumber, StringComparer.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(entry.Location) && !entry.Location.Equals("N/A", StringComparison.OrdinalIgnoreCase))
+                        {
+                            responseString.AppendFormat("<li>Asset: {0}, Location: {1}</li>", entry.AssetNumber, entry.Location);
+                        }
                     }
+                    responseString.Append("</ul>");
                 }
-                responseString.Append("</ul>");
+                else
+                {
+                    responseString.Append("No answer found. Try another prompt.");
+                    return responseString.ToString();
+                }
+            }
+            else
+            {
+                responseString.Append("No answer found. Try another prompt.");
+                return responseString.ToString();
             }
             return responseString.ToString();
         }
@@ -306,65 +319,77 @@ namespace ErgotronChatbotApi.BAL.Services
             {
                 // Convert JArray to a list of DashAssetTracking objects
                 var dashAssetTrackings = data.ToObject<List<DashAssetTracking>>();
-
-                // Dictionary to hold asset counts for each floor and wing
-                var floorWingAssetCounter = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
-
-                // Count asset occurrences by floor and wing
-                foreach (var entry in dashAssetTrackings)
+                if (dashAssetTrackings.Any())
                 {
-                    string floor = entry.Floor;
-                    string wing = entry.Wing;
-                    string asset = entry.AssetNumber;
+                    // Dictionary to hold asset counts for each floor and wing
+                    var floorWingAssetCounter = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
 
-                    // Exclude entries with "NOT ASSIGNED" or "N/A" asset numbers
-                    if (!sourceArray.Contains(asset, StringComparer.OrdinalIgnoreCase))
+                    // Count asset occurrences by floor and wing
+                    foreach (var entry in dashAssetTrackings)
                     {
-                        // Initialize floor in the dictionary if not present
-                        if (!floor.Equals(Unassigned, StringComparison.OrdinalIgnoreCase))
+                        string floor = entry.Floor;
+                        string wing = entry.Wing;
+                        string asset = entry.AssetNumber;
+
+                        // Exclude entries with "NOT ASSIGNED" or "N/A" asset numbers
+                        if (!sourceArray.Contains(asset, StringComparer.OrdinalIgnoreCase))
                         {
-                            if (!floorWingAssetCounter.ContainsKey(floor))
+                            // Initialize floor in the dictionary if not present
+                            if (!floor.Equals(Unassigned, StringComparison.OrdinalIgnoreCase))
                             {
-                                floorWingAssetCounter[floor] = [];
+                                if (!floorWingAssetCounter.ContainsKey(floor))
+                                {
+                                    floorWingAssetCounter[floor] = [];
+                                }
+
+                                // Initialize wing in the floor dictionary if not present
+                                if (!wing.Equals(Unassigned, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    if (!floorWingAssetCounter[floor].ContainsKey(wing))
+                                    {
+                                        floorWingAssetCounter[floor][wing] = [];
+                                    }
+
+                                    // Increment the asset count for the floor and wing
+                                    if (!floorWingAssetCounter[floor][wing].ContainsKey(asset))
+                                    {
+                                        floorWingAssetCounter[floor][wing][asset] = 0;
+                                    }
+                                    floorWingAssetCounter[floor][wing][asset]++;
+                                }
                             }
+                        }
+                    }
 
-                            // Initialize wing in the floor dictionary if not present
-                            if (!wing.Equals(Unassigned, StringComparison.OrdinalIgnoreCase))
+                    // Generate the response string for most used assets
+                    foreach (var (floor, wings) in floorWingAssetCounter)
+                    {
+                        responseString.Append($"Floor {floor}:<br>");
+                        foreach (var (wing, assetCounter) in wings)
+                        {
+                            if (assetCounter.Any())
                             {
-                                if (!floorWingAssetCounter[floor].ContainsKey(wing))
-                                {
-                                    floorWingAssetCounter[floor][wing] = [];
-                                }
-
-                                // Increment the asset count for the floor and wing
-                                if (!floorWingAssetCounter[floor][wing].ContainsKey(asset))
-                                {
-                                    floorWingAssetCounter[floor][wing][asset] = 0;
-                                }
-                                floorWingAssetCounter[floor][wing][asset]++;
+                                // Find the most used asset for the wing
+                                var mostUsedAsset = assetCounter.OrderByDescending(x => x.Value).FirstOrDefault();
+                                responseString.Append($"<b>Wing {wing}:</b> The most used asset is <b>'{mostUsedAsset.Key}'</b> with <b>{mostUsedAsset.Value}</b> occurrences.<br>");
+                            }
+                            else
+                            {
+                                responseString.Append($"<b>Wing {wing}:</b> No assigned assets found.<br>");
                             }
                         }
                     }
                 }
-
-                // Generate the response string for most used assets
-                foreach (var (floor, wings) in floorWingAssetCounter)
+                else
                 {
-                    responseString.Append($"Floor {floor}:<br>");
-                    foreach (var (wing, assetCounter) in wings)
-                    {
-                        if (assetCounter.Any())
-                        {
-                            // Find the most used asset for the wing
-                            var mostUsedAsset = assetCounter.OrderByDescending(x => x.Value).FirstOrDefault();
-                            responseString.Append($"<b>Wing {wing}:</b> The most used asset is <b>'{mostUsedAsset.Key}'</b> with <b>{mostUsedAsset.Value}</b> occurrences.<br>");
-                        }
-                        else
-                        {
-                            responseString.Append($"<b>Wing {wing}:</b> No assigned assets found.<br>");
-                        }
-                    }
+                    responseString.Append("No answer found. Try another prompt.");
+                    return responseString.ToString();
                 }
+            }
+            else
+            {
+                responseString.Append("No answer found. Try another prompt.");
+                return responseString.ToString();
             }
 
             return responseString.ToString();
@@ -410,7 +435,16 @@ namespace ErgotronChatbotApi.BAL.Services
                         responseString.Append($" Location <b>{finalData.Location}</b>.");
                     }
                 }
-
+                else
+                {
+                    responseString.Append("No answer found. Try another prompt.");
+                    return responseString.ToString();
+                }
+            }
+            else
+            {
+                responseString.Append("No answer found. Try another prompt.");
+                return responseString.ToString();
             }
             return responseString.ToString();
         }
@@ -475,7 +509,8 @@ namespace ErgotronChatbotApi.BAL.Services
 
             if (data == null || !data.Any())
             {
-                responseString.Append("No data available.");
+                responseString.Append("No answer found. Try another prompt.");
+                return responseString.ToString();
             }
 
             string serialNo = Helper.ExtractNo(query);
@@ -489,7 +524,8 @@ namespace ErgotronChatbotApi.BAL.Services
 
             if (filteredResult == null || !filteredResult.Any())
             {
-                return "We have no data regarding the provided workstation.";
+                responseString.Append("We have no data regarding the provided workstation.");
+                return responseString.ToString();
             }
 
             metaDataValue.TryGetValue("is_count_user", out var isCountUser);
@@ -525,37 +561,44 @@ namespace ErgotronChatbotApi.BAL.Services
 
             var workstationDetails = data.ToObject<List<WorkstationDetails>>();
 
-            // Try to retrieve meta-data flags
-            metaData.TryGetValue(MetaData.is_last_contact_ws, out var isLastContactWs);
-            metaData.TryGetValue(MetaData.is_software_up_date_ws, out var isSoftwareUpDateWs);
-            metaData.TryGetValue(MetaData.is_most_dep_ws, out var isMostDepWs);
-            metaData.TryGetValue(MetaData.is_latestip_ws, out var isLatestIpWs);
+            if (workstationDetails.Any())
+            {
+                // Try to retrieve meta-data flags
+                metaData.TryGetValue(MetaData.is_last_contact_ws, out var isLastContactWs);
+                metaData.TryGetValue(MetaData.is_software_up_date_ws, out var isSoftwareUpDateWs);
+                metaData.TryGetValue(MetaData.is_most_dep_ws, out var isMostDepWs);
+                metaData.TryGetValue(MetaData.is_latestip_ws, out var isLatestIpWs);
 
-            // Check for 'is_last_contact_ws' flag and process the last contact information
-            if (bool.TryParse(isLastContactWs, out var isLastContact) && isLastContact)
-            {
-                ProcessLastContact(workstationDetails, response);
-            }
-            // Check for 'is_software_up_date_ws' flag and process the software update information
-            else if (bool.TryParse(isSoftwareUpDateWs, out var isSoftwareUpDate) && isSoftwareUpDate)
-            {
-                ProcessSoftwareUpdate(workstationDetails, query, response);
-            }
-            // Check for 'is_most_dep_ws' flag and process department-wise workstation count
-            else if (bool.TryParse(isMostDepWs, out var isMostDep) && isMostDep)
-            {
-                ProcessMostDep(workstationDetails, response);
-            }
-            // Check for 'is_latestip_ws' flag and process the latest IP and MAC address
-            else if (bool.TryParse(isLatestIpWs, out var isLatestIp) && isLatestIp)
-            {
-                ProcessLatestIp(workstationDetails, query, response);
+                // Check for 'is_last_contact_ws' flag and process the last contact information
+                if (bool.TryParse(isLastContactWs, out var isLastContact) && isLastContact)
+                {
+                    ProcessLastContact(workstationDetails, response);
+                }
+                // Check for 'is_software_up_date_ws' flag and process the software update information
+                else if (bool.TryParse(isSoftwareUpDateWs, out var isSoftwareUpDate) && isSoftwareUpDate)
+                {
+                    ProcessSoftwareUpdate(workstationDetails, query, response);
+                }
+                // Check for 'is_most_dep_ws' flag and process department-wise workstation count
+                else if (bool.TryParse(isMostDepWs, out var isMostDep) && isMostDep)
+                {
+                    ProcessMostDep(workstationDetails, response);
+                }
+                // Check for 'is_latestip_ws' flag and process the latest IP and MAC address
+                else if (bool.TryParse(isLatestIpWs, out var isLatestIp) && isLatestIp)
+                {
+                    ProcessLatestIp(workstationDetails, query, response);
+                }
+                else
+                {
+                    ProcessUnoccupiedWorkstations(workstationDetails, response);
+                }
             }
             else
             {
-                ProcessUnoccupiedWorkstations(workstationDetails, response);
+                response.Append("No answer found. Try another prompt.");
+                return response.ToString();
             }
-
             return response.ToString();
         }
 
@@ -962,7 +1005,7 @@ namespace ErgotronChatbotApi.BAL.Services
             else
             {
                 // If no data available, return a message indicating no data
-                responseString.Append("No workstation details available.");
+                responseString.Append("No answer found. Try another prompt.");
             }
 
             // Return the constructed response string
@@ -980,8 +1023,15 @@ namespace ErgotronChatbotApi.BAL.Services
         /// <returns>A formatted string indicating the number of workstations based on their online status or total availability.</returns>
         private static string GetWorkstationHistory(JArray res, Dictionary<string, string> metaData)
         {
+            // Initialize StringBuilder for the response string
+            var responseString = new StringBuilder();
+
             // Early return if no data is available
-            if (res == null || !res.Any()) return "No workstation history available.";
+            if (res == null || !res.Any())
+            {
+                responseString.Append("No answer found. Try another prompt.");
+                return responseString.ToString();
+            }
 
             // Convert JArray to List<WorkstationHistory>
             var data = res.ToObject<List<WorkstationHistory>>();
@@ -990,10 +1040,11 @@ namespace ErgotronChatbotApi.BAL.Services
             var workStationHistory = data?.FirstOrDefault();
 
             // If no workstation history is available, return an appropriate message
-            if (workStationHistory == null) return "No workstation history found.";
-
-            // Initialize StringBuilder for the response string
-            var responseString = new StringBuilder();
+            if (workStationHistory == null)
+            {
+                responseString.Append("No workstation history found.");
+                return responseString.ToString();
+            }
 
             // Check the metadata for the 'workstation_online' key to determine the status
             metaData.TryGetValue(MetaData.workstation_online, out var workstationOnline);
@@ -1022,14 +1073,22 @@ namespace ErgotronChatbotApi.BAL.Services
         /// <returns>A formatted string containing the count of chargers in HTML format.</returns>
         private static string GetChargerDetails(JArray res)
         {
+            // Initialize StringBuilder for building response
+            var responseString = new StringBuilder();
+
             // If no data is available, return a message indicating no data
-            if (res == null || !res.Any()) return "No data available.";
+            if (res == null || !res.Any())
+            {
+                responseString.Append("No answer found. Try another prompt.");
+                return responseString.ToString();
+            }
 
             // Convert JArray to List<WorkstationHistory>
             var data = res.ToObject<List<WorkstationHistory>>();
 
             // Return formatted string with the count of chargers
-            return $"We have <b>{data?.Count}</b> Chargers.";
+            responseString.Append($"We have <b>{data?.Count}</b> Chargers.");
+            return responseString.ToString();
         }
         #endregion
 
@@ -1042,14 +1101,22 @@ namespace ErgotronChatbotApi.BAL.Services
         /// <returns>A formatted string containing the count of batteries in HTML format.</returns>
         private static string GetBattaryHealth(JArray res)
         {
+            // Initialize StringBuilder for building response
+            var responseString = new StringBuilder();
+
             // If no data is available, return a message indicating no data
-            if (res == null || !res.Any()) return "No data available.";
+            if (res == null || !res.Any())
+            {
+                responseString.Append("No answer found. Try another prompt.");
+                return responseString.ToString();
+            }
 
             // Convert JArray to List<BatteryHealthDetails>
             var data = res.ToObject<List<BatteryHealthDetails>>();
 
             // Return formatted string with the count of batteries
-            return $"We have <b>{data?.Count}</b> batteries.";
+            responseString.Append($"We have <b>{data?.Count}</b> batteries.");
+            return responseString.ToString();
         }
         #endregion
 
@@ -1063,14 +1130,19 @@ namespace ErgotronChatbotApi.BAL.Services
         /// <returns>A formatted string containing a list of valid assets or a message indicating no data was found.</returns>
         private static string GetAssetDetails(JArray res)
         {
+            // Initialize StringBuilder for building response
+            var responseString = new StringBuilder();
+
             // Return early if there is no data
-            if (res == null || !res.Any()) return "No data available.";
+            if (res == null || !res.Any())
+            {
+                responseString.Append("No answer found. Try another prompt.");
+                return responseString.ToString();
+            }
 
             // Convert JArray to List<AssetDetails>
             var data = res.ToObject<List<AssetDetails>>();
 
-            // Initialize StringBuilder for building response
-            var responseString = new StringBuilder();
             responseString.Append("Here is a list of decommissioned carts ready to be removed from Rhythm:");
 
             // Filter and construct list of valid items
@@ -1233,7 +1305,8 @@ namespace ErgotronChatbotApi.BAL.Services
             var data = jArray.ToObject<List<WorkstationLog>>();
             if (data == null || data.Count == 0)
             {
-                responseString.Append("No data available to process the query.");
+                responseString.Append("No answer found. Try another prompt.");
+                return responseString.ToString();
             }
 
             // Filter logs that match the serial number and time
@@ -1279,7 +1352,8 @@ namespace ErgotronChatbotApi.BAL.Services
             var data = res.ToObject<List<DashAssetTracking>>();
             if (data == null || data.Count == 0)
             {
-                responseString.Append("No data available to process the query.");
+                responseString.Append("No answer found. Try another prompt.");
+                return responseString.ToString();
             }
 
             var result = data?.FirstOrDefault(p => p.SerialNo == serialNo);
